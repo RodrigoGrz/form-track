@@ -2,15 +2,15 @@ import { useState, useEffect, useCallback } from 'react';
 import { useNavigation, useFocusEffect } from '@react-navigation/native';
 import { VStack, FlatList, HStack, Heading, Text, useToast } from 'native-base';
 
-import { api } from '@services/api';
-import { AppError } from '@utils/AppError';
-import { AppNavigatorRoutesProps } from '@routes/app.routes';
+import { api } from '@/services/api';
+import { AppError } from '@/utils/AppError';
+import { AppNavigatorRoutesProps } from '@/routes/app.routes';
 
-import { Group } from '@components/Group';
-import { HomeHeader } from '@components/HomeHeader';
-import { Loading } from '@components/Loading';
-import { ExerciseCard } from '@components/ExerciseCard';
-import { ExerciseDTO } from '@dtos/ExerciseDTO';
+import { Group } from '@/components/Group';
+import { HomeHeader } from '@/components/HomeHeader';
+import { Loading } from '@/components/Loading';
+import { ExerciseCard } from '@/components/ExerciseCard';
+import { ExerciseDTO } from '@/dtos/ExerciseDTO';
 
 export function Home() {
     const [isLoading, setIsLoading] = useState(true); 
@@ -73,7 +73,7 @@ export function Home() {
         <VStack flex={1}>
             <HomeHeader />
 
-            <FlatList 
+            <FlatList
                 data={groups}
                 keyExtractor={item => item}
                 renderItem={({ item }) => (
