@@ -4,18 +4,18 @@ import { HStack, Heading, Icon, Text, VStack, Image, Box, ScrollView, useToast }
 import { Feather } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
-import { AppNavigatorRoutesProps } from '@routes/app.routes';
+import { AppNavigatorRoutesProps } from '@/routes/app.routes';
 
-import BodySvg from '@assets/body.svg';
-import SeriesSvg from '@assets/series.svg';
-import RepetitionsSvg from '@assets/repetitions.svg';
+import BodySvg from '@/assets/body.svg';
+import SeriesSvg from '@/assets/series.svg';
+import RepetitionsSvg from '@/assets/repetitions.svg';
 
-import { Button } from '@components/Button';
-import { AppError } from '@utils/AppError';
+import { Button } from '@/components/Button';
+import { AppError } from '@/utils/AppError';
 
-import { api } from '@services/api';
-import { ExerciseDTO } from '@dtos/ExerciseDTO';
-import { Loading } from '@components/Loading';
+import { api } from '@/services/api';
+import { ExerciseDTO } from '@/dtos/ExerciseDTO';
+import { Loading } from '@/components/Loading';
 
 type RouteParamsProps = {
     exerciseId: string;

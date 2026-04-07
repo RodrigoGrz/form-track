@@ -1,13 +1,13 @@
 import { HStack, Heading, Text, VStack, Icon } from 'native-base';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import defaultUserPhotoImg from '@assets/userPhotoDefault.png';
+import defaultUserPhotoImg from '@/assets/userPhotoDefault.png';
 
 import { UserPhoto } from './UserPhoto';
 import { TouchableOpacity } from 'react-native';
 
-import { useAuth } from '@hooks/useAuth';
-import { api } from '@services/api';
+import { useAuth } from '@/hooks/useAuth';
+import { api } from '@/services/api';
 
 export function HomeHeader() {
     const { user, signOut } = useAuth();

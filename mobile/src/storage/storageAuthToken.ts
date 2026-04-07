@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-import { AUTH_TOKE_STORAGE } from '@storage/storageConfig';
+import { AUTH_TOKE_STORAGE } from '@/storage/storageConfig';
 
 type StorageAuthTokenProps = {
     token: string;

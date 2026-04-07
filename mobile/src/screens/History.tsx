@@ -2,13 +2,13 @@ import { useCallback, useState } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
 import { Heading, VStack, SectionList, Text, useToast } from 'native-base';
 
-import { HistoryByDayDTO } from '@dtos/HistoryByDayDTO';
-import { api } from '@services/api';
+import { HistoryByDayDTO } from '@/dtos/HistoryByDayDTO';
+import { api } from '@/services/api';
 
-import { ScreenHeader } from '@components/ScreenHeader';
-import { HistoryCard } from '@components/HistoryCard';
-import { Loading } from '@components/Loading';
-import { AppError } from '@utils/AppError';
+import { ScreenHeader } from '@/components/ScreenHeader';
+import { HistoryCard } from '@/components/HistoryCard';
+import { Loading } from '@/components/Loading';
+import { AppError } from '@/utils/AppError';
 
 export function History() {
     const [isLoading, setIsLoading] = useState(true);
@@ -45,7 +45,7 @@ export function History() {
 
            {
             isLoading ? <Loading /> :
-            <SectionList 
+            <SectionList
                 sections={exercises}
                 keyExtractor={item => item.id}
                 renderItem={({ item }) => (

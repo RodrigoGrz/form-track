@@ -5,16 +5,16 @@ import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
-import { api } from '@services/api';
+import { api } from '@/services/api';
 
-import { useAuth } from '@hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth';
 
-import LogoSvg from '@assets/logo.svg';
-import BackgroundImg from '@assets/background.png';
-import { AppError } from '@utils/AppError';
+import LogoSvg from '@/assets/logo.svg';
+import BackgroundImg from '@/assets/background.png';
+import { AppError } from '@/utils/AppError';
 
-import { Input } from '@components/Input';
-import { Button } from '@components/Button';
+import { Input } from '@/components/Input';
+import { Button } from '@/components/Button';
 
 type FormDataProps = {
     name: string;

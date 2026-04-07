@@ -7,16 +7,16 @@ import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
 import * as yup from 'yup';
 
-import defaultUserPhotoImg from '@assets/userPhotoDefault.png';
+import defaultUserPhotoImg from '@/assets/userPhotoDefault.png';
 
-import { ScreenHeader } from '@components/ScreenHeader';
-import { UserPhoto } from '@components/UserPhoto';
-import { Input } from '@components/Input';
-import { Button } from '@components/Button';
+import { ScreenHeader } from '@/components/ScreenHeader';
+import { UserPhoto } from '@/components/UserPhoto';
+import { Input } from '@/components/Input';
+import { Button } from '@/components/Button';
 
-import { useAuth } from '@hooks/useAuth';
-import { api } from '@services/api';
-import { AppError } from '@utils/AppError';
+import { useAuth } from '@/hooks/useAuth';
+import { api } from '@/services/api';
+import { AppError } from '@/utils/AppError';
 
 const PHOTO_SIZE = 33;
 
