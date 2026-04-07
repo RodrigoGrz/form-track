@@ -1,14 +1,12 @@
 import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
-import { VStack, Image, Text, Center, Heading, ScrollView, useToast } from 'native-base';
+import { ScrollView, View, Text, Image } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
 import { api } from '@/services/api';
-
 import { useAuth } from '@/hooks/useAuth';
-
 import LogoSvg from '@/assets/logo.svg';
 import BackgroundImg from '@/assets/background.png';
 import { AppError } from '@/utils/AppError';
@@ -33,9 +31,7 @@ const signUpSchema = yup.object({
 export function SignUp() {
     const [isLoading, setIsLoading] = useState(false);
 
-    const toast = useToast();
     const { signIn } = useAuth();
-
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
         resolver: yupResolver(signUpSchema)
     });
@@ -45,51 +41,41 @@ export function SignUp() {
         navigation.goBack();
     }
 
-    async function handleSignUp({ name, email, password, password_confirm }: FormDataProps) {
+    async function handleSignUp({ name, email, password }: FormDataProps) {
         try {
             setIsLoading(true);
-            await api.post('/users', {
-                name,
-                email,
-                password,
-            });
+            await api.post('/users', { name, email, password });
             await signIn(email, password);
         } catch (error) {
             setIsLoading(false);
-            const isAppError = error instanceof AppError;
-            const title = isAppError ? error.message : 'Não foi possível criar a conta. Tente novamente mais tarde.'
-
-            toast.show({
-                title,
-                placement: 'top',
-                bgColor: 'red.500'
-            })
+            const title = error instanceof AppError
+                ? error.message
+                : 'Não foi possível criar a conta. Tente novamente mais tarde.';
+            alert(title); // substituindo toast do NativeBase
         }
-    }   
+    }
 
     return (
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-            <VStack flex={1} px={10} pb={16}>
+        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="flex-1">
+            <View className="flex-1 px-10 pb-16 relative">
                 <Image 
                     source={BackgroundImg}
                     defaultSource={BackgroundImg}
-                    alt="Pessoas treinando"
                     resizeMode="contain"
-                    position="absolute"
+                    className="absolute"
                 />
 
-                <Center my={24}>
+                <View className="items-center my-24">
                     <LogoSvg />
-
-                    <Text color="gray.100" fontSize="sm">
+                    <Text className="text-gray-100 text-sm mt-2">
                         Treine sua mente e o seu corpo
                     </Text>
-                </Center>
+                </View>
 
-                <Center>
-                    <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
+                <View className="w-full">
+                    <Text className="text-gray-100 text-xl font-bold mb-6 text-center">
                         Crie sua conta
-                    </Heading>
+                    </Text>
 
                     <Controller 
                         control={control}
@@ -149,20 +135,21 @@ export function SignUp() {
                         )}
                     />         
 
-                    <Button
-                        title="Criar e acessar"
-                        onPress={handleSubmit(handleSignUp)}
-                        isLoading={isLoading}
-                    />
-                </Center>
+                    <View className="flex gap-6">
+                        <Button
+                            title="Criar e acessar"
+                            onPress={handleSubmit(handleSignUp)}
+                            isLoading={isLoading}
+                        />
 
-                <Button 
-                    title="Volte para o login" 
-                    variant="outline"
-                    mt={12}
-                    onPress={handleGoBack}
-                />
-            </VStack>
+                        <Button 
+                            title="Volte para o login" 
+                            variant="outline"
+                            onPress={handleGoBack}
+                        />
+                    </View>
+                </View>
+            </View>
         </ScrollView>
     );
 }

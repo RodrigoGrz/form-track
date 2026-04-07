@@ -1,10 +1,9 @@
 import { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { Controller, useForm } from 'react-hook-form';
-import { VStack, Image, Text, Center, Heading, ScrollView, useToast } from 'native-base';
+import { View, Text, Image, ScrollView } from 'react-native';
 
 import { AuthNavigatorRoutesProps } from '@/routes/auth.routes';
-
 import { useAuth } from '@/hooks/useAuth';
 
 import LogoSvg from '@/assets/logo.svg';
@@ -15,116 +14,118 @@ import { Button } from '@/components/Button';
 import { AppError } from '@/utils/AppError';
 
 type FormData = {
-    email: string;
-    password: string;
+  email: string;
+  password: string;
 }
 
 export function SignIn() {
-    const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
-    const { signIn } = useAuth();
-    const navigation = useNavigation<AuthNavigatorRoutesProps>();
-    const toast = useToast();
+  const { signIn } = useAuth();
+  const navigation = useNavigation<AuthNavigatorRoutesProps>();
 
-    const { control, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const { control, handleSubmit, formState: { errors } } = useForm<FormData>();
 
-    function handleNewAccount() {
-        navigation.navigate('signUp');
+  function handleNewAccount() {
+    navigation.navigate('signUp');
+  }
+
+  async function handleSignIn({ email, password }: FormData) {
+    try {
+      setIsLoading(true);
+      await signIn(email, password);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível entrar. Tente novamente mais tarde.';
+
+      setIsLoading(false);
+
+      // 👉 Substituir toast do NativeBase depois (ex: react-native-toast-message)
+      alert(title);
     }
+  }
 
-    async function handleSignIn({ email, password }: FormData) {
-        try {
-            setIsLoading(true);
-            await signIn(email, password);
-        } catch (error) {
-            const isAppError = error instanceof AppError;
+  return (
+    <ScrollView
+      contentContainerStyle={{ flexGrow: 1 }}
+      showsVerticalScrollIndicator={false}
+    >
+      <View className="flex-1 px-10 pb-16">
+        
+        <Image
+          source={BackgroundImg}
+          defaultSource={BackgroundImg}
+          resizeMode="contain"
+          className="absolute"
+        />
 
-            const title = isAppError ? error.message : 'Não foi possível entrar. Tente novamente mais tarde.';
+        <View className="items-center my-24">
+          <LogoSvg />
 
-            setIsLoading(false);
+          <Text className="text-gray-100 text-sm mt-2">
+            Treine sua mente e o seu corpo
+          </Text>
+        </View>
 
-            toast.show({
-                title,
-                placement: 'top',
-                bgColor: 'red.500'
-            });
-        }
-    }
+        <View className="w-full">
+          <Text className="text-gray-100 text-xl mb-6 font-bold text-center">
+            Acesse sua conta
+          </Text>
 
-    return (
-        <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
-            <VStack flex={1} px={10} pb={16}>
-                <Image 
-                    source={BackgroundImg}
-                    defaultSource={BackgroundImg}
-                    alt="Pessoas treinando"
-                    resizeMode="contain"
-                    position="absolute"
-                />
+          <Controller
+            control={control}
+            name="email"
+            rules={{ required: 'Informe o e-mail.' }}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="E-mail"
+                keyboardType="email-address"
+                autoCapitalize="none"
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.email?.message}
+              />
+            )}
+          />
 
-                <Center my={24}>
-                    <LogoSvg />
+          <Controller
+            control={control}
+            name="password"
+            rules={{ required: 'Informe a senha.' }}
+            render={({ field: { onChange, value } }) => (
+              <Input
+                placeholder="Senha"
+                secureTextEntry
+                onChangeText={onChange}
+                value={value}
+                errorMessage={errors.password?.message}
+              />
+            )}
+          />
 
-                    <Text color="gray.100" fontSize="sm">
-                        Treine sua mente e o seu corpo
-                    </Text>
-                </Center>
+          <Button
+            title="Acessar"
+            onPress={handleSubmit(handleSignIn)}
+            isLoading={isLoading}
+          />
+        </View>
 
-                <Center>
-                    <Heading color="gray.100" fontSize="xl" mb={6} fontFamily="heading">
-                        Acesse sua conta
-                    </Heading>
+        <View className="items-center mt-24">
+          <Text className="text-gray-100 text-sm mb-3">
+            Ainda não tem acesso?
+          </Text>
 
-                    <Controller
-                        control={control}
-                        name="email"
-                        rules={{ required: 'Informe o e-mail.' }}
-                        render={({ field: { onChange, value } }) => (
-                            <Input 
-                                placeholder="E-mail"
-                                keyboardType="email-address"
-                                autoCapitalize="none"
-                                onChangeText={onChange}
-                                value={value}
-                                errorMessage={errors.email?.message}
-                            />
-                        )}
-                    />
+          <Button
+            title="Criar conta"
+            variant="outline"
+            onPress={handleNewAccount}
+          />
+        </View>
 
-                    <Controller 
-                        control={control}
-                        name="password"
-                        rules={{ required: 'Informe a senha.' }}
-                        render={({ field: { onChange, value } }) => (
-                            <Input 
-                                placeholder="Senha"
-                                secureTextEntry
-                                onChangeText={onChange}
-                                value={value}
-                                errorMessage={errors.password?.message}
-                            />
-                        )}
-                    />
-
-                    <Button 
-                        title="Acessar"
-                        onPress={handleSubmit(handleSignIn)}
-                        isLoading={isLoading}
-                    />
-                </Center>
-
-                <Center mt={24}>
-                    <Text color="gray.100" fontSize="sm" mb={3} fontFamily="body">
-                        Ainda não tem acesso?
-                    </Text>
-
-                    <Button 
-                        title="Criar conta" 
-                        variant="outline"
-                        onPress={handleNewAccount}
-                    />
-                </Center>
-            </VStack>
-        </ScrollView>
-    );
+      </View>
+    </ScrollView>
+  );
 }
