@@ -57,7 +57,7 @@ export function SignUp() {
 
     return (
         <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} className="flex-1">
-            <View className="flex-1 px-10 pb-16 relative">
+            <View className="flex flex-1 justify-between px-10 pb-16 relative bg-gray-700">
                 <Image 
                     source={BackgroundImg}
                     defaultSource={BackgroundImg}
@@ -135,19 +135,19 @@ export function SignUp() {
                         )}
                     />         
 
-                    <View className="flex gap-6">
-                        <Button
-                            title="Criar e acessar"
-                            onPress={handleSubmit(handleSignUp)}
-                            isLoading={isLoading}
-                        />
+                    <Button
+                        title="Criar e acessar"
+                        onPress={handleSubmit(handleSignUp)}
+                        isLoading={isLoading}
+                    />
+                </View>
 
-                        <Button 
-                            title="Volte para o login" 
-                            variant="outline"
-                            onPress={handleGoBack}
-                        />
-                    </View>
+                <View className="mt-16">
+                    <Button 
+                        title="Volte para o login" 
+                        variant="outline"
+                        onPress={handleGoBack}
+                    />
                 </View>
             </View>
         </ScrollView>
