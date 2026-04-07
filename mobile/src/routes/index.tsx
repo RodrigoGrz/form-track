@@ -13,7 +13,7 @@ export function Routes() {
     ...DefaultTheme,
     colors: {
       ...DefaultTheme.colors,
-      background: '#1f2937', // gray-700
+      background: '#121214',
     },
   };
 

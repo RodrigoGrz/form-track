@@ -22,7 +22,7 @@ export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
 export function AppRoutes() {
-  const iconSize = 24; // equivalente ao sizes[6]
+  const iconSize = 24;
 
   return (
     <Navigator
@@ -30,16 +30,15 @@ export function AppRoutes() {
         headerShown: false,
         tabBarShowLabel: false,
 
-        // cores equivalentes ao seu tema
-        tabBarActiveTintColor: '#22c55e', // green-500
-        tabBarInactiveTintColor: '#e5e7eb', // gray-200
+        tabBarActiveTintColor: '#00B37E',
+        tabBarInactiveTintColor: '#C4C4CC',
 
         tabBarStyle: {
-          backgroundColor: '#374151', // gray-600
+          backgroundColor: '#202024',
           borderTopWidth: 0,
-          height: Platform.OS === 'android' ? undefined : 66,
-          paddingBottom: 24,
-          paddingTop: 24,
+          height: 42,
+          paddingTop: 28,
+          paddingBottom: 40,
         },
       }}
     >
