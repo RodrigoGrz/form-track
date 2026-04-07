@@ -1,20 +1,40 @@
-# Ignite Gym
+<h1 align="center">
+  FormTrack 💪
+</h1>
 
-## 🎯 Sobre
+## 🎯 About
 
-O projeto Ignite Gym tem como objetivo construir um histórico de quais exercícios você fez na academia. Além disso, caso tenha alguma dúvida de como realizar algum exercício especifico, existe a opção de clicar no exercício e ver um gif de como fazê-lo.
+FormTrack is a mobile application designed to help you track your gym workouts and build a history of your training sessions.
 
-## 🖥️ Tecnologias
+In addition, the app helps users perform exercises correctly by providing visual guidance — each exercise includes a GIF demonstrating proper form.
 
-* React Native
-* Expo
-* Native Base
-* Axios
-* Async Storage
+---
 
-## 😁 Como utilizar
+## 🚀 Features
 
-* É importante instalar as dependências tanto da pasta `api` quanto da `mobile`
-* `npm install` - Para instalar as dependências` (verifique se o prompt está na pasta correta)
-* `npm run dev` - Para rodar a api
-* `npx expo start` - Para todar o aplicativo
+- 📊 Track your workout history
+- 🏋️ View exercises by category
+- 🎥 Watch GIFs demonstrating how to perform each exercise
+
+---
+
+## 🛠️ Technologies
+
+This project was built using:
+
+- React Native
+- Expo
+- NativeBase
+- Axios
+- Async Storage
+
+---
+
+## ▶️ Getting Started
+
+Make sure you install dependencies for both the **API** and **mobile** folders.
+
+### Install dependencies
+
+```bash
+npm install
