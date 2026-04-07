@@ -17,7 +17,7 @@ import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/services/api';
 import { AppError } from '@/utils/AppError';
 
-const PHOTO_SIZE = 132; // Ajuste para pixels (33 * 4)
+const PHOTO_SIZE = 132;
 
 type FormDataProps = {
   name: string;
@@ -122,7 +122,7 @@ export function Profile() {
       <ScreenHeader title="Perfil" />
 
       <ScrollView contentContainerStyle={{ paddingBottom: 56 }}>
-        <View className="items-center mt-6 px-10">
+        <View className="items-center mt-6 px-10 gap-1">
           {photoIsLoading ? (
             <View className="w-[132px] h-[132px] rounded-full bg-gray-500 animate-pulse" />
           ) : (
@@ -137,7 +137,9 @@ export function Profile() {
               Alterar foto
             </RNText>
           </TouchableOpacity>
+        </View>
 
+        <View className="px-10">
           <Controller
             control={control}
             name="name"
@@ -149,7 +151,7 @@ export function Profile() {
           <Controller
             control={control}
             name="email"
-            render={({ field: { value } }) => <Input placeholder="E-mail" value={value} onChangeText={() => {}} isDisabled />}
+            render={({ field: { value } }) => <Input placeholder="E-mail" value={value} onChangeText={() => {}} isDisable />}
           />
         </View>
 
@@ -176,7 +178,9 @@ export function Profile() {
             )}
           />
 
-          <Button title="Atualizar" onPress={handleSubmit(handleProfileUpdate)} isLoading={isUpdating} className="mt-4" />
+          <View className="mt-5">
+            <Button title="Atualizar" onPress={handleSubmit(handleProfileUpdate)} isLoading={isUpdating} />
+          </View>
         </View>
       </ScrollView>
     </View>

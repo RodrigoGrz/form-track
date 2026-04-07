@@ -14,7 +14,7 @@ export default function App() {
 
   if (!fontsLoaded) {
     return (
-      <View className="flex-1 items-center justify-center bg-gray-900">
+      <View className="flex-1 items-center justify-center bg-gray-700">
         <Loading />
       </View>
     );
