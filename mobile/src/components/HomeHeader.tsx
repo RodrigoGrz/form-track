@@ -1,45 +1,45 @@
-import { HStack, Heading, Text, VStack, Icon } from 'native-base';
+import { View, Text, TouchableOpacity } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import defaultUserPhotoImg from '@/assets/userPhotoDefault.png';
 
 import { UserPhoto } from './UserPhoto';
-import { TouchableOpacity } from 'react-native';
 
 import { useAuth } from '@/hooks/useAuth';
 import { api } from '@/services/api';
 
 export function HomeHeader() {
-    const { user, signOut } = useAuth();
+  const { user, signOut } = useAuth();
 
-    return (
-        <HStack bg="gray.600" pt={16} pb={5} px={8} alignItems="center">
-            <UserPhoto
-                source={user.avatar 
-                    ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` } 
-                    : defaultUserPhotoImg}
-                alt="Image do usuário"
-                size={16}
-                mr={4}
-            />
-            <VStack flex={1}>
-                <Text color="gray.100" fontSize="md">
-                    Olá,
-                </Text>
+  return (
+    <View className="bg-gray-600 pt-16 pb-5 px-8 flex-row items-center">
+      <UserPhoto
+        source={
+          user.avatar
+            ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
+            : defaultUserPhotoImg
+        }
+        size={64}
+        className="mr-4"
+      />
 
-                <Heading color="gray.100" fontSize="md" fontFamily="heading">
-                    {user.name}
-                </Heading>
-            </VStack>
+      <View className="flex-1">
+        <Text className="text-gray-100 text-base">
+          Olá,
+        </Text>
 
-            <TouchableOpacity onPress={signOut}>
-                <Icon 
-                    as={MaterialIcons}
-                    name="logout"
-                    color="gray.200"
-                    size={7}
-                />
-            </TouchableOpacity>
-        </HStack>
-    );
+        <Text className="text-gray-100 text-base font-bold">
+          {user.name}
+        </Text>
+      </View>
+
+      <TouchableOpacity onPress={signOut}>
+        <MaterialIcons
+          name="logout"
+          size={28}
+          color="#e5e7eb"
+        />
+      </TouchableOpacity>
+    </View>
+  );
 }

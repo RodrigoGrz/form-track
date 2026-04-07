@@ -1,26 +1,32 @@
+import { View, Text } from 'react-native';
 import { HistoryDTO } from '@/dtos/HistoryDTO';
-import { HStack, Heading, Text, VStack } from 'native-base';
 
 type Props = {
-    data: HistoryDTO;
-}
+  data: HistoryDTO;
+};
 
 export function HistoryCard({ data }: Props) {
-    return (
-        <HStack w="full" px={5} py={4} mb={3} bg="gray.600" rounded="md" alignItems="center" justifyContent="space-between">
-            <VStack mr={5} flex={1}>
-                <Heading color="white" fontSize="md" textTransform="capitalize" fontFamily="heading" numberOfLines={1}>
-                    {data.group}
-                </Heading>
+  return (
+    <View className="w-full px-5 py-4 mb-3 bg-gray-600 rounded-md flex-row items-center justify-between">
+      <View className="mr-5 flex-1">
+        <Text
+          className="text-white text-base font-bold capitalize"
+          numberOfLines={1}
+        >
+          {data.group}
+        </Text>
 
-                <Text color="gray.100" fontSize="lg" numberOfLines={1}>
-                    {data.name}
-                </Text>
-            </VStack>
+        <Text
+          className="text-gray-100 text-lg"
+          numberOfLines={1}
+        >
+          {data.name}
+        </Text>
+      </View>
 
-            <Text color="gray.300" fontSize="md">
-                {data.hour}
-            </Text>
-        </HStack>
-    );
+      <Text className="text-gray-300 text-base">
+        {data.hour}
+      </Text>
+    </View>
+  );
 }

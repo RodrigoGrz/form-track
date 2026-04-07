@@ -1,5 +1,4 @@
 import { Platform } from 'react-native';
-import { useTheme } from 'native-base';
 import { createBottomTabNavigator, BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 import HomeSvg from '@/assets/home.svg';
@@ -12,10 +11,10 @@ import { Exercise } from '@/screens/Exercise';
 import { History } from '@/screens/History';
 
 type AppRoutes = {
-    home: undefined;
-    exercise: { exerciseId: string };
-    profile: undefined;
-    history: undefined;
+  home: undefined;
+  exercise: { exerciseId: string };
+  profile: undefined;
+  history: undefined;
 }
 
 export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
@@ -23,59 +22,61 @@ export type AppNavigatorRoutesProps = BottomTabNavigationProp<AppRoutes>;
 const { Navigator, Screen } = createBottomTabNavigator<AppRoutes>();
 
 export function AppRoutes() {
-    const { sizes, colors } = useTheme();
+  const iconSize = 24;
 
-    const iconSize = sizes[6];
+  return (
+    <Navigator
+      screenOptions={{
+        headerShown: false,
+        tabBarShowLabel: false,
 
-    return (
-        <Navigator screenOptions={{
-            headerShown: false,
-            tabBarShowLabel: false,
-            tabBarActiveTintColor: colors.green[500],
-            tabBarInactiveTintColor: colors.gray[200],
-            tabBarStyle: {
-                backgroundColor: colors.gray[600],
-                borderTopWidth: 0,
-                height: Platform.OS === 'android' ? 'auto' : 66,
-                paddingBottom: sizes[6],
-                paddingTop: sizes[6],
-            }
-        }}>
-            <Screen 
-                name="home"
-                component={Home}
-                options={{
-                    tabBarIcon: ({ color }) => (
-                        <HomeSvg fill={color} width={iconSize} height={iconSize} />
-                    )
-                }}
-            />
+        tabBarActiveTintColor: '#00B37E',
+        tabBarInactiveTintColor: '#C4C4CC',
 
-            <Screen 
-                name="history"
-                component={History}
-                options={{
-                    tabBarIcon: ({ color }) => (
-                        <HistorySvg fill={color} width={iconSize} height={iconSize} />
-                    )
-                }}
-            />
+        tabBarStyle: {
+          backgroundColor: '#202024',
+          borderTopWidth: 0,
+          height: 42,
+          paddingTop: 28,
+          paddingBottom: 40,
+        },
+      }}
+    >
+      <Screen
+        name="home"
+        component={Home}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <HomeSvg fill={color} width={iconSize} height={iconSize} />
+          ),
+        }}
+      />
 
-            <Screen 
-                name="profile"
-                component={Profile}
-                options={{
-                    tabBarIcon: ({ color }) => (
-                        <ProfileSvg fill={color} width={iconSize} height={iconSize} />
-                    )
-                }}
-            />
+      <Screen
+        name="history"
+        component={History}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <HistorySvg fill={color} width={iconSize} height={iconSize} />
+          ),
+        }}
+      />
 
-            <Screen 
-                name="exercise"
-                component={Exercise}
-                options={{ tabBarButton: () => null }}
-            />
-        </Navigator>
-    );
+      <Screen
+        name="profile"
+        component={Profile}
+        options={{
+          tabBarIcon: ({ color }) => (
+            <ProfileSvg fill={color} width={iconSize} height={iconSize} />
+          ),
+        }}
+      />
+
+      <Screen
+        name="exercise"
+        component={Exercise}
+        options={{ tabBarButton: () => null }}
+      />
+    </Navigator>
+  );
 }

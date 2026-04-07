@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import { TouchableOpacity } from 'react-native';
-import { HStack, Heading, Icon, Text, VStack, Image, Box, ScrollView, useToast } from 'native-base';
+import { useState, useEffect } from 'react';
+import { TouchableOpacity, ScrollView, View, Text } from 'react-native';
+import { Image } from 'expo-image';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 
@@ -18,135 +18,120 @@ import { ExerciseDTO } from '@/dtos/ExerciseDTO';
 import { Loading } from '@/components/Loading';
 
 type RouteParamsProps = {
-    exerciseId: string;
+  exerciseId: string;
 }
 
 export function Exercise() {
-    const [sendingRegister, setSendingRegister] = useState(false);
-    const [isLoading, setIsLoading] = useState(true);
-    const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO);
-    const navigation = useNavigation<AppNavigatorRoutesProps>();
+  const [sendingRegister, setSendingRegister] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+  const [exercise, setExercise] = useState<ExerciseDTO>({} as ExerciseDTO);
+  const [gifUrl, setGifUrl] = useState<string>('');
+  const navigation = useNavigation<AppNavigatorRoutesProps>();
 
-    const route = useRoute();
-    const toast = useToast();
+  const route = useRoute();
+  const { exerciseId } = route.params as RouteParamsProps;
 
-    const { exerciseId } = route.params as RouteParamsProps;
+  function handleGoBack() {
+    navigation.goBack();
+  }
 
-    function handleGoBack() {
-        navigation.goBack();
+  async function fetchExerciseDetails() {
+    try {
+      setIsLoading(true);
+      const response = await api.get(`/exercises/${exerciseId}`);
+      setExercise(response.data);
+
+      setGifUrl(`${api.defaults.baseURL}/exercise/demo/${response.data.demo}`);
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível carregar os detalhes do exercício.';
+      alert(title);
+    } finally {
+      setIsLoading(false);
     }
+  }
 
-    async function fetchExerciseDetails() {
-        try {
-            setIsLoading(true);
-            const response = await api.get(`/exercises/${exerciseId}`);
-            setExercise(response.data);
-        } catch (error) {
-            const isAppError = error instanceof AppError;
-            const title = isAppError ? error.message : 'Não foi possível carregar os detalhes do exercício.';
-
-            toast.show({
-                title,
-                placement: 'top',
-                bgColor: 'red.500'
-            });
-        } finally {
-            setIsLoading(false);
-        }
+  async function handleExerciseHistoryRegister() {
+    try {
+      setSendingRegister(true);
+      await api.post('/history', { exercise_id: exerciseId });
+      alert('Parabéns! Exercício registrado no seu histórico');
+      navigation.navigate('history');
+    } catch (error) {
+      const isAppError = error instanceof AppError;
+      const title = isAppError
+        ? error.message
+        : 'Não foi possível registrar o exercício.';
+      alert(title);
+    } finally {
+      setSendingRegister(false);
     }
+  }
 
-    async function handleExerciseHistoryRegister() {
-        try {
-            setSendingRegister(true);
-            await api.post('/history', { exercise_id: exerciseId });
+  useEffect(() => {
+    fetchExerciseDetails();
+  }, [exerciseId]);
 
-            toast.show({
-                title: 'Parabéns! Exercício registrado no seu histórico',
-                placement: 'top',
-                bgColor: 'green.700'
-            });
+  if (isLoading) {
+    return <Loading />;
+  }
 
-            navigation.navigate('history');
-        } catch (error) {
-            const isAppError = error instanceof AppError;
-            const title = isAppError ? error.message : 'Não foi possível registrar o exercício.';
+  return (
+    <View className="flex-1 bg-gray-700">
+      <View className="px-8 pt-12 bg-gray-600">
+        <TouchableOpacity onPress={handleGoBack} className="mb-4">
+          <Feather name="arrow-left" size={24} color="#22c55e" />
+        </TouchableOpacity>
 
-            toast.show({
-                title,
-                placement: 'top',
-                bgColor: 'red.500'
-            });
-        } finally {
-            setSendingRegister(false);
-        }
-    }
+        <View className="flex-row justify-between items-center mb-8">
+          <Text className="text-white text-lg font-bold flex-shrink">
+            {exercise.name}
+          </Text>
 
-    useEffect(() => {
-        fetchExerciseDetails();
-    }, [exerciseId]);
+          <View className="flex-row items-center">
+            <BodySvg />
+            <Text className="text-gray-200 ml-1 capitalize">{exercise.group}</Text>
+          </View>
+        </View>
+      </View>
 
-    return (
-        <VStack flex={1}>
-            <VStack px={8} bg="gray.600" pt={12}>
-                <TouchableOpacity onPress={handleGoBack}>
-                    <Icon as={Feather} name="arrow-left" color="green.500" size={6} />
-                </TouchableOpacity>
+      <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
+        <View className="p-8">
+          <View className="rounded-lg mb-3 overflow-hidden">
+            {gifUrl ? (
+              <Image
+                source={{ uri: gifUrl }}
+                style={{ width: '100%', height: 300, borderRadius: 12 }}
+                contentFit="contain"
+              />
+            ) : (
+              <Text className="text-gray-400 text-center">GIF não disponível</Text>
+            )}
+          </View>
 
-                <HStack justifyContent="space-between" mt={4} mb={8} alignItems="center">
-                    <Heading color="gray.100" fontSize="lg" fontFamily="heading" flexShrink={1}>
-                        {exercise.name}
-                    </Heading>
+          <View className="bg-gray-600 rounded-md px-4 pb-4">
+            <View className="flex-row justify-around items-center mb-6 mt-5">
+              <View className="flex-row items-center">
+                <SeriesSvg />
+                <Text className="text-gray-200 ml-2">{exercise.series} séries</Text>
+              </View>
 
-                    <HStack alignItems="center">
-                        <BodySvg />
-                        <Text color="gray.200" ml={1} textTransform="capitalize">
-                            {exercise.group}
-                        </Text>
-                    </HStack>
-                </HStack>
-            </VStack>
+              <View className="flex-row items-center">
+                <RepetitionsSvg />
+                <Text className="text-gray-200 ml-2">{exercise.repetitions} repetições</Text>
+              </View>
+            </View>
 
-        { isLoading ? <Loading /> :
-            <ScrollView contentContainerStyle={{ paddingBottom: 16 }}>
-                <VStack p={8}>
-                    <Box rounded="lg" mb={3} overflow="hidden">
-                        <Image
-                            w="full"
-                            h={80}
-                            source={{ uri: `${api.defaults.baseURL}/exercise/demo/${exercise.demo}` }}
-                            alt="Nome do exercício"
-                            resizeMode="cover"
-                            rounded="lg"
-                            overflow="hidden"
-                        />
-                    </Box>
-
-                    <Box bg="gray.600" rounded="md" pb={4} px={4}>
-                        <HStack alignItems="center" justifyContent="space-around" mb={6} mt={5}>
-                            <HStack>
-                                <SeriesSvg />
-                                <Text color="gray.200" ml={2}>
-                                    {exercise.series} séries
-                                </Text>
-                            </HStack>
-
-                            <HStack>
-                                <RepetitionsSvg />
-                                <Text color="gray.200" ml={2}>
-                                    {exercise.repetitions} repetições
-                                </Text>
-                            </HStack>
-                        </HStack>
-
-                        <Button 
-                            title="Marcar como realizado"
-                            isLoading={sendingRegister}
-                            onPress={handleExerciseHistoryRegister}
-                        />
-                    </Box>
-                </VStack>
-            </ScrollView>
-        }
-        </VStack>
-    );
+            <Button
+              title="Marcar como realizado"
+              isLoading={sendingRegister}
+              onPress={handleExerciseHistoryRegister}
+            />
+          </View>
+        </View>
+      </ScrollView>
+    </View>
+  );
 }

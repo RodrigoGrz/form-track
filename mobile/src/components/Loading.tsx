@@ -1,9 +1,9 @@
-import { Spinner, Center } from 'native-base';
+import { View, ActivityIndicator } from 'react-native';
 
 export function Loading() {
-    return (
-       <Center flex={1} bg="gray.700">
-        <Spinner color="green.500" />
-       </Center> 
-    );
+  return (
+    <View className="flex-1 bg-gray-700 items-center justify-center">
+      <ActivityIndicator color="#00B37E" />
+    </View>
+  );
 }

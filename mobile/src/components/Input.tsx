@@ -1,39 +1,31 @@
-import { Input as NativeBaseInput, IInputProps, FormControl } from 'native-base';
+import { View, TextInput, Text, TextInputProps } from 'react-native';
 
-type Props = IInputProps & {
-    errorMessage?: string | null;
-}
+type Props = TextInputProps & {
+  errorMessage?: string | null;
+  isDisable?: boolean;
+};
 
-export function Input({ errorMessage = null, isInvalid, ...rest }: Props) {
-    const invalid = !!errorMessage || isInvalid;
+export function Input({ errorMessage = null, isDisable = false, ...rest }: Props) {
+  const invalid = !!errorMessage && !isDisable;
 
-    return (
-        <FormControl isInvalid={invalid} mb={4}>
-            <NativeBaseInput 
-                bg="gray.700"
-                h={14}
-                px={4}
-                borderWidth={0}
-                fontSize="md"
-                color="white"
-                fontFamily="body"
-                placeholderTextColor="gray.300"
-                isInvalid={invalid}
-                _invalid={{
-                    borderWidth: 1,
-                    borderColor: 'red.500'
-                }}
-                _focus={{
-                    bg: "gray.700",
-                    borderWidth: 1,
-                    borderColor: "green.500"
-                }}
-                {...rest}
-            />
+  return (
+    <View className="mb-4">
+      <TextInput
+        className={`
+          h-14 px-4 rounded-md text-base
+          bg-gray-600 ${isDisable ? 'bg-gray-600/40 text-gray-300' : 'bg-opacity-100 text-gray-100'}
+          ${invalid ? 'border border-red-500' : 'border border-transparent focus:border-green-500'}
+        `}
+        placeholderTextColor="#7C7C8A"
+        editable={!isDisable}
+        {...rest}
+      />
 
-            <FormControl.ErrorMessage _text={{ color: 'red.500' }}>
-                {errorMessage}
-            </FormControl.ErrorMessage>
-        </FormControl>
-    );
+      {!isDisable && errorMessage && (
+        <Text className="text-red-500 mt-1 text-sm">
+          {errorMessage}
+        </Text>
+      )}
+    </View>
+  );
 }

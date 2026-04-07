@@ -1,15 +1,15 @@
-import { Center, Heading } from 'native-base';
+import { View, Text } from 'react-native';
 
 type Props = {
-    title: string;
+  title: string;
 }
 
 export function ScreenHeader({ title }: Props) {
-    return (
-        <Center bg="gray.600" pb={6} pt={16}>
-            <Heading color="gray.100" fontSize="xl" fontFamily="heading">
-                {title}
-            </Heading>
-        </Center>
-    );
+  return (
+    <View className="bg-gray-600 pt-16 pb-6 items-center">
+      <Text className="text-gray-100 text-xl font-bold">
+        {title}
+      </Text>
+    </View>
+  );
 }
