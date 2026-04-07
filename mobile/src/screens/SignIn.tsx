@@ -43,7 +43,6 @@ export function SignIn() {
 
       setIsLoading(false);
 
-      // 👉 Substituir toast do NativeBase depois (ex: react-native-toast-message)
       alert(title);
     }
   }
@@ -53,8 +52,7 @@ export function SignIn() {
       contentContainerStyle={{ flexGrow: 1 }}
       showsVerticalScrollIndicator={false}
     >
-      <View className="flex-1 px-10 pb-16">
-        
+      <View className="flex flex-1 justify-between px-10 pb-16 bg-gray-700">
         <Image
           source={BackgroundImg}
           defaultSource={BackgroundImg}
@@ -113,8 +111,8 @@ export function SignIn() {
           />
         </View>
 
-        <View className="items-center mt-24">
-          <Text className="text-gray-100 text-sm mb-3">
+        <View className="flex items-center gap-5">
+          <Text className="text-gray-100 text-sm">
             Ainda não tem acesso?
           </Text>
 

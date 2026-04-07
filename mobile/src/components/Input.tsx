@@ -13,7 +13,7 @@ export function Input({ errorMessage = null, ...rest }: Props) {
         className={`h-14 px-4 bg-gray-700 text-white text-base rounded-md ${
           invalid ? 'border border-red-500' : 'focus:border-green-500 border border-transparent'
         }`}
-        placeholderTextColor="#d1d5db"
+        placeholderTextColor="#7C7C8A"
         {...rest}
       />
 

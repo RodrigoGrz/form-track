@@ -13,7 +13,7 @@ export function Button({
   isLoading = false,
   onPress,
 }: Props) {
-  const baseStyles = "w-full h-14 rounded-sm items-center justify-center";
+  const baseStyles = "w-full h-14 rounded-md items-center justify-center";
 
   const variants = {
     solid: "bg-green-700 active:bg-green-500",

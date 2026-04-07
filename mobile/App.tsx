@@ -21,7 +21,7 @@ export default function App() {
   }
 
   return (
-    <View className="flex-1 bg-gray-900">
+    <View className="flex-1 bg-gray-700">
       <StatusBar
         barStyle="light-content"
         backgroundColor="transparent"
