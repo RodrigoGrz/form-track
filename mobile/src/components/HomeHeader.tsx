@@ -19,7 +19,7 @@ export function HomeHeader() {
             ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` }
             : defaultUserPhotoImg
         }
-        size={16}
+        size={64}
         className="mr-4"
       />
 

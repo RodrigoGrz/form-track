@@ -9,7 +9,7 @@ export function Group({ name, isActive, ...rest }: Props) {
   return (
     <Pressable
       {...rest}
-      className={`mr-3 w-24 h-10 bg-gray-600 rounded-md items-center justify-center overflow-hidden ${
+      className={`mr-3 w-24 h-11 bg-gray-600 rounded-md items-center justify-center ${
         isActive ? "border border-green-500" : ""
       }`}
     >

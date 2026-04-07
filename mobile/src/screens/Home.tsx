@@ -67,7 +67,7 @@ export function Home() {
   );
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-gray-700">
       <HomeHeader />
 
       <FlatList
@@ -91,7 +91,7 @@ export function Home() {
       {isLoading ? (
         <Loading />
       ) : (
-        <View className="flex-1 px-8">
+        <View className="flex-1 px-8 bg-gray-700">
           <View className="flex-row justify-between mb-5">
             <Text className="text-gray-200 text-base font-bold">
               Exercicios
