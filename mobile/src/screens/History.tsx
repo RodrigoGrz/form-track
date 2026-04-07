@@ -33,7 +33,7 @@ export function History() {
   }, []));
 
   return (
-    <View className="flex-1">
+    <View className="flex-1 bg-gray-700">
       <ScreenHeader title="Histórico de Exercício" />
 
       {isLoading ? (
@@ -44,7 +44,7 @@ export function History() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => <HistoryCard data={item} />}
           renderSectionHeader={({ section: { title } }) => (
-            <Text className="text-gray-200 text-md mt-10 mb-3 font-bold px-8">
+            <Text className="text-gray-200 text-md mt-10 mb-3 font-bold">
               {title}
             </Text>
           )}
