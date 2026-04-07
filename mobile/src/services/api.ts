@@ -15,7 +15,7 @@ type APIInstanceProps = AxiosInstance & {
 };
 
 const api = axios.create({
-    baseURL: 'http://192.168.56.1:3333',
+    baseURL: 'https://overscented-loamless-etha.ngrok-free.dev',
 }) as APIInstanceProps;
 
 let failedQueue: Array<PromiseType> = [];
