@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import { TouchableOpacity, ScrollView, View, Text as RNText } from 'react-native';
+import { TouchableOpacity, ScrollView, View, Text as RNText, Alert } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as ImagePicker from 'expo-image-picker';
-import * as FileSystem from 'expo-file-system';
 import { z } from 'zod';
 
 import defaultUserPhotoImg from '@/assets/userPhotoDefault.png';
@@ -76,23 +75,35 @@ export function Profile() {
     setPhotoIsLoading(true);
 
     try {
+      const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+      if(!permission.granted) {
+        Alert.alert('Ops...', 'Permissão para acessar a galeria é necessária.');
+        return;
+      }
+      
       const photoSelected = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        quality: 1,
-        aspect: [4, 4],
+        mediaTypes: ['images'],
         allowsEditing: true,
+        aspect: [4, 4],
+        quality: 1,
       });
 
-      if (photoSelected.canceled) return;
+      if (!photoSelected.canceled) {
+        const asset = photoSelected.assets[0];
 
-      if (photoSelected.assets[0].uri) {
-        const photoInfo = await FileSystem.getInfoAsync(photoSelected.assets[0].uri);
-        if (photoInfo.exists && photoInfo.size / 1024 / 1024 > 5) {
-          alert('Essa imagem é muito grande. Escolha uma de até 5MB.');
+        if (asset.mimeType !== 'image/jpeg' && asset.mimeType !== 'image/png') {
+          Alert.alert('Ops...', 'Apenas imagens JPG ou PNG são permitidas.');
+          return;
+        }
+
+        if (asset.fileSize && asset.fileSize / 1024 / 1024 > 5) {
+          Alert.alert('Ops..;', 'Essa imagem é muito grande. Escolha uma de até 5MB.');
           return;
         }
 
         const fileExtension = photoSelected.assets[0].uri.split('.').pop();
+
         const photoFile = {
           name: `${user.name}.${fileExtension}`.toLowerCase(),
           uri: photoSelected.assets[0].uri,
@@ -143,7 +154,7 @@ export function Profile() {
       <ScrollView contentContainerStyle={{ paddingBottom: 56 }}>
         <View className="items-center mt-6 px-10 gap-1">
           {photoIsLoading ? (
-            <View className="w-[132px] h-[132px] rounded-full bg-gray-500 animate-pulse" />
+            <View className="w-[132px] h-[132px] rounded-full bg-gray-500" />
           ) : (
             <UserPhoto
               source={user.avatar ? { uri: `${api.defaults.baseURL}/avatar/${user.avatar}` } : defaultUserPhotoImg}
