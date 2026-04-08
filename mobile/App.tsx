@@ -1,3 +1,5 @@
+import 'react-native-gesture-handler';
+
 import { StatusBar, View } from 'react-native';
 import { useFonts, Roboto_400Regular, Roboto_700Bold } from '@expo-google-fonts/roboto';
 import '@/styles/global.css';
