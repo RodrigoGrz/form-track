@@ -2,8 +2,8 @@ import { useState } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { ScrollView, View, Text, Image } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 import { api } from '@/services/api';
 import { useAuth } from '@/hooks/useAuth';
@@ -21,19 +21,29 @@ type FormDataProps = {
     password_confirm: string;
 }
 
-const signUpSchema = yup.object({
-    name: yup.string().required('Informe o nome.'),
-    email: yup.string().email('E-mail inválido').required('Informe o e-mail.'),
-    password: yup.string().required('Informe a senha').min(6, 'A senha deve ter pelo menos 6 dígitos.'),
-    password_confirm: yup.string().required('Confirme a senha.').oneOf([yup.ref('password')], 'A confirmação da senha não confere.')
-});
+const signUpSchema = z
+  .object({
+    name: z.string().nonempty('Informe o nome.'),
+    email: z.email('E-mail inválido').nonempty('Informe o e-mail.'),
+    password: z.string().nonempty('Informe a senha').min(6, 'A senha deve ter pelo menos 6 dígitos.'),
+    password_confirm: z.string().nonempty('Confirme a senha.'),
+  })
+  .superRefine((data, ctx) => {
+    if (data.password !== data.password_confirm) {
+      ctx.addIssue({
+        path: ['password_confirm'],
+        code: 'custom',
+        message: 'A confirmação da senha não confere.',
+      });
+    }
+  });
 
 export function SignUp() {
     const [isLoading, setIsLoading] = useState(false);
 
     const { signIn } = useAuth();
     const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
-        resolver: yupResolver(signUpSchema)
+        resolver: zodResolver(signUpSchema)
     });
     const navigation = useNavigation();
 
@@ -51,7 +61,7 @@ export function SignUp() {
             const title = error instanceof AppError
                 ? error.message
                 : 'Não foi possível criar a conta. Tente novamente mais tarde.';
-            alert(title); // substituindo toast do NativeBase
+            alert(title);
         }
     }
 

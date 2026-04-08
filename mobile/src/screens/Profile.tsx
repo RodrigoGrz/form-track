@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import { TouchableOpacity, ScrollView, View, Text as RNText } from 'react-native';
 import { Controller, useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { zodResolver } from '@hookform/resolvers/zod';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
-import * as yup from 'yup';
+import { z } from 'zod';
 
 import defaultUserPhotoImg from '@/assets/userPhotoDefault.png';
 
@@ -21,27 +21,46 @@ const PHOTO_SIZE = 132;
 
 type FormDataProps = {
   name: string;
-  email: string;
-  password: string;
-  old_password: string;
-  confirm_password: string;
+  password: string | null;
+  confirm_password: string | null;
+  email?: string;
+  old_password?: string;
 };
 
-const profileSchema = yup.object({
-  name: yup.string().required('Informe o nome.'),
-  email: yup.string(),
-  password: yup.string().min(6, 'A senha deve ter pelo menos 6 dígitos.').nullable().transform((value) => (!!value ? value : null)),
-  old_password: yup.string(),
-  confirm_password: yup
-    .string()
-    .nullable()
-    .transform((value) => (!!value ? value : null))
-    .oneOf([yup.ref('password'), null], 'A confirmação de senha não confere.')
-    .when('password', {
-      is: (Field: any) => Field,
-      then: (schema) => schema.nullable().required('Informe a confirmação.').transform((value) => (!!value ? value : null)),
-    }),
-});
+const profileSchema = z
+  .object({
+    name: z.string().nonempty('Informe o nome.'),
+    email: z.email().optional(),
+    password: z
+      .string()
+      .min(6, 'A senha deve ter pelo menos 6 dígitos.')
+      .nullable()
+      .transform((value) => (value ? value : null)),
+    old_password: z.string().optional(),
+    confirm_password: z
+      .string()
+      .nullable()
+      .transform((value) => (value ? value : null)),
+  })
+  .superRefine((data, ctx) => {
+    const { password, confirm_password } = data;
+
+    if (password) {
+      if (!confirm_password) {
+        ctx.addIssue({
+          path: ['confirm_password'],
+          code: "custom",
+          message: 'Informe a confirmação.',
+        });
+      } else if (confirm_password !== password) {
+        ctx.addIssue({
+          path: ['confirm_password'],
+          code: "custom",
+          message: 'A confirmação de senha não confere.',
+        });
+      }
+    }
+  });
 
 export function Profile() {
   const [isUpdating, setIsUpdating] = useState(false);
@@ -50,7 +69,7 @@ export function Profile() {
   const { user, updateUserProfile } = useAuth();
   const { control, handleSubmit, formState: { errors } } = useForm<FormDataProps>({
     defaultValues: { name: user.name, email: user.email },
-    resolver: yupResolver(profileSchema),
+    resolver: zodResolver(profileSchema),
   });
 
   async function handleUserPhotoSelect() {
