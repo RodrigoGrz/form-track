@@ -36,9 +36,19 @@ export function AppRoutes() {
         tabBarStyle: {
           backgroundColor: '#202024',
           borderTopWidth: 0,
-          height: 42,
-          paddingTop: 28,
-          paddingBottom: 40,
+          height: 70,
+        },
+
+        tabBarItemStyle: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
+        },
+
+        tabBarIconStyle: {
+          flex: 1,
+          justifyContent: 'center',
+          alignItems: 'center',
         },
       }}
     >
@@ -70,12 +80,6 @@ export function AppRoutes() {
             <ProfileSvg fill={color} width={iconSize} height={iconSize} />
           ),
         }}
-      />
-
-      <Screen
-        name="exercise"
-        component={Exercise}
-        options={{ tabBarButton: () => null }}
       />
     </Navigator>
   );
