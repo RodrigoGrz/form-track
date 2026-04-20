@@ -1,6 +1,7 @@
 {
   "extends": "expo/tsconfig.base",
   "compilerOptions": {
+    "target": "es2024",
     "strict": true,
     "types": ["react", "react-native", "nativewind/types"],
     "jsx": "react-jsx",
